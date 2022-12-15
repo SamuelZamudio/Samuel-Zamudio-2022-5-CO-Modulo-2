@@ -5,6 +5,9 @@ from dino_runner.utils.constants import BG, ICON, SCREEN_HEIGHT, SCREEN_WIDTH, T
 from dino_runner.components.dinosaur import Dinosaur
 from dino_runner.components.obstacles.obstacle_manager import ObstacleManager
 from dino_runner.components.menu import Menu
+from dino_runner.components.scoree import Scoree
+from dino_runner.components.death import Death
+
 
 class Game:
     GAME_SPEED = 20
@@ -23,13 +26,18 @@ class Game:
         self.running = False
         self.score = 0
         self.death_count = 0
+        self.scoree = Scoree("your score is: 0 ", self.screen)
         self.menu = Menu('Press any key to start ...', self.screen)
+        self.death = Death("Deaths: 0", self.screen )
+        
 
     def execute(self):
         self.running = True
         while self.running:
             if not self.playing:
                 self.show_menu()
+                self.show_scoree()
+                self.show_death()
         pygame.display.quit()
         pygame.quit()
 
@@ -82,15 +90,45 @@ class Game:
 
         if self.death_count == 0:
             self.menu.draw(self.screen)
-        else:
-            self.menu.update_message('new message')
+        elif self.death_count > 0:
+            self.menu.update_message('Game over. Press any key to start' ) 
             self.menu.draw(self.screen)
-           
+            
         self.screen.blit(ICON, (half_screen_width - 50, half_screen_height - 140))
-
+        
         self.menu.update(self)
-
+       
+    def show_scoree(self):
+        self.menu.reset_screen_color(self.screen)
+        half_screen_height = SCREEN_HEIGHT // 2 
+        half_screen_width = SCREEN_WIDTH // 2
+        
+        if self.death_count == 0:
+            self.scoree.draw(self.screen)
+        elif self.death_count > 0:
+            self.scoree.update_message_score("your score: " + str(self.score)) 
+            self.scoree.draw(self.screen)
+            
+        self.screen.blit(ICON, (half_screen_width - 50, half_screen_height - 140))
+        
+        self.scoree.update_scoree(self)
     
+    def show_death(self):
+        self.menu.reset_screen_color(self.screen)
+        half_screen_height = SCREEN_HEIGHT // 2 
+        half_screen_width = SCREEN_WIDTH // 2
+        
+        if self.death_count == 0:
+            self.death.draw(self.screen)
+        elif self.death_count > 0:
+            self.death.update_message_death("Death: " + str(self.death_count)) 
+            self.death.draw(self.screen)
+            
+        self.screen.blit(ICON, (half_screen_width - 50, half_screen_height - 140))
+        
+        self.death.update_death(self)
+
+
     def update_score(self):
         self.score += 1
 
