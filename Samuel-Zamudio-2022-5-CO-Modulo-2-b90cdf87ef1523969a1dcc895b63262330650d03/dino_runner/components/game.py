@@ -36,8 +36,7 @@ class Game:
         while self.running:
             if not self.playing:
                 self.show_menu()
-                self.show_scoree()
-                self.show_death()
+                
         pygame.display.quit()
         pygame.quit()
 
@@ -84,7 +83,7 @@ class Game:
         self.x_pos_bg -= self.game_speed
 
     def show_menu(self):
-        self.menu.reset_screen_color(self.screen)
+        self.screen.fill((255, 255, 255)) 
         half_screen_height = SCREEN_HEIGHT // 2
         half_screen_width = SCREEN_WIDTH // 2
 
@@ -93,13 +92,15 @@ class Game:
         elif self.death_count > 0:
             self.menu.update_message('Game over. Press any key to start' ) 
             self.menu.draw(self.screen)
+            self.show_scoree()
+            self.show_death()
             
         self.screen.blit(ICON, (half_screen_width - 50, half_screen_height - 140))
         
         self.menu.update(self)
        
     def show_scoree(self):
-        self.menu.reset_screen_color(self.screen)
+        
         half_screen_height = SCREEN_HEIGHT // 2 
         half_screen_width = SCREEN_WIDTH // 2
         
@@ -114,7 +115,7 @@ class Game:
         self.scoree.update_scoree(self)
     
     def show_death(self):
-        self.menu.reset_screen_color(self.screen)
+        
         half_screen_height = SCREEN_HEIGHT // 2 
         half_screen_width = SCREEN_WIDTH // 2
         
